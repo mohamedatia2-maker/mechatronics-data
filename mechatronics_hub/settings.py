@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-p5-!33!rcdn9uh996t3wp!57-p%l*lqj7g($i410ux9w)squ27
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -141,6 +141,24 @@ CORS_ALLOW_ALL_ORIGINS = True
 LOGIN_REDIRECT_URL = 'hub:home'
 LOGOUT_REDIRECT_URL = 'hub:home'
 LOGIN_URL = 'hub:login'
+
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
+
+
+# Database Configuration
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+try:
+    import dj_database_url
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
+except ImportError:
+    pass
 
 # AI API Configuration
 import os
