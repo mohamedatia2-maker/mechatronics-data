@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-p5-!33!rcdn9uh996t3wp!57-p%l*lqj7g($i410ux9w)squ27
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['web-production-fcd4e.up.railway.app']
 
 # Application definition
 
@@ -123,13 +122,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = "/static/"
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# تعديل بسيط في الصيغة لضمان التوافق مع إصدارات Django الجديدة
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 
 MEDIA_URL = '/media/'
