@@ -1,0 +1,9 @@
+django
+gunicorn
+whitenoise
+django-cors-headers
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+pandas
+openpyxl
