@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-p5-!33!rcdn9uh996t3wp!57-p%l*lqj7g($i410ux9w)squ27
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['web-production-fcd4e.up.railway.app']
-
+# يسمح لجميع الروابط بالوصول، وهو الحل الأسرع لتجاوز خطأ الـ Crash حالياً
+ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
