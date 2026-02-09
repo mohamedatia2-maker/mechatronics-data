@@ -135,7 +135,10 @@ LOGIN_REDIRECT_URL = 'hub:home'
 LOGOUT_REDIRECT_URL = 'hub:home'
 LOGIN_URL = 'hub:login'
 
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.railway.app',
+    'mechatronics-data.up.railway.app' # الرابط الجديد هنا
+]
 
 
 # ابحث عن جزء DATABASES القديم واستبدله بهذا
