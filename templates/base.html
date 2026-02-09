@@ -1053,7 +1053,8 @@
                 </span>
             </button>
             {% else %}
-            <a href="#" class="flex flex-col items-center justify-center w-full h-full space-y-1 group">
+            <a href="{% url 'hub:about' %}"
+                class="flex flex-col items-center justify-center w-full h-full space-y-1 group">
                 <svg class="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover:text-forest-green dark:group-hover:text-emerald-500 transition-colors"
                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
