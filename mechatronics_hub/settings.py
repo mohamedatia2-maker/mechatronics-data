@@ -137,7 +137,7 @@ LOGIN_URL = 'hub:login'
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.railway.app',
-    'mechatronics-data.up.railway.app' # الرابط الجديد هنا
+    'https://mechatronics-data.up.railway.app' # الرابط الجديد هنا
 ]
 
 
