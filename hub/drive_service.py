@@ -8,11 +8,27 @@ SERVICE_ACCOUNT_FILE = 'credentials.json'
 
 def get_drive_service():
     """Authenticates and returns the Drive API service."""
-    if not os.path.exists(SERVICE_ACCOUNT_FILE):
-        raise FileNotFoundError(f"Credentials file '{SERVICE_ACCOUNT_FILE}' not found.")
+    creds = None
     
-    creds = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    # Check for environment variable (for railway)
+    if os.environ.get('GOOGLE_CREDENTIALS_JSON'):
+        import json
+        try:
+            service_account_info = json.loads(os.environ.get('GOOGLE_CREDENTIALS_JSON'))
+            creds = service_account.Credentials.from_service_account_info(
+                service_account_info, scopes=SCOPES)
+        except json.JSONDecodeError:
+            print("Error: GOOGLE_CREDENTIALS_JSON environment variable is not valid JSON.")
+
+    # Fallback to file if no env var or invalid
+    if not creds and os.path.exists(SERVICE_ACCOUNT_FILE):
+        creds = service_account.Credentials.from_service_account_file(
+            SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+
+    if not creds:
+        raise FileNotFoundError(
+            f"Credentials not found. Please set GOOGLE_CREDENTIALS_JSON env var or ensure '{SERVICE_ACCOUNT_FILE}' exists.")
+
     service = build('drive', 'v3', credentials=creds)
     return service
 
