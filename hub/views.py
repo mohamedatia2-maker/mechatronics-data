@@ -10,15 +10,28 @@ class AboutView(TemplateView):
     template_name = 'about.html'
 
 def debug_migrations(request):
-    from django.db import connection
-    from django.db.migrations.recorder import MigrationRecorder
+    import subprocess
     import os
-    applied = MigrationRecorder.Migration.objects.all().values_list('app', 'name')
+    from django.conf import settings
+    
+    # Run showmigrations
+    try:
+        show_output = subprocess.check_output(['python', 'manage.py', 'showmigrations', 'hub'], stderr=subprocess.STDOUT).decode()
+    except Exception as e:
+        show_output = str(e)
+        
+    # List files
     migrations_dir = os.path.join(os.path.dirname(__file__), 'migrations')
     files = os.listdir(migrations_dir) if os.path.exists(migrations_dir) else []
+    
+    # Check current directory
+    cwd = os.getcwd()
+    
     return JsonResponse({
-        'applied': list(applied),
-        'files': files
+        'show_migrations': show_output,
+        'migration_files': files,
+        'cwd': cwd,
+        'base_dir': str(settings.BASE_DIR)
     })
 
 def basic_software(request):
