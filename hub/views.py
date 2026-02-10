@@ -14,25 +14,28 @@ def debug_migrations(request):
     import os
     from django.conf import settings
     
+    results = {}
+    
     # Run showmigrations
     try:
-        show_output = subprocess.check_output(['python', 'manage.py', 'showmigrations', 'hub'], stderr=subprocess.STDOUT).decode()
+        results['showmigrations'] = subprocess.check_output(['python', 'manage.py', 'showmigrations', 'hub'], stderr=subprocess.STDOUT).decode()
     except Exception as e:
-        show_output = str(e)
+        results['showmigrations_error'] = str(e)
+        
+    # Run migrate
+    try:
+        results['migrate_output'] = subprocess.check_output(['python', 'manage.py', 'migrate', 'hub', '--noinput'], stderr=subprocess.STDOUT).decode()
+    except Exception as e:
+        results['migrate_error'] = str(e)
         
     # List files
     migrations_dir = os.path.join(os.path.dirname(__file__), 'migrations')
-    files = os.listdir(migrations_dir) if os.path.exists(migrations_dir) else []
+    results['migration_files'] = os.listdir(migrations_dir) if os.path.exists(migrations_dir) else []
     
-    # Check current directory
-    cwd = os.getcwd()
+    results['cwd'] = os.getcwd()
+    results['base_dir'] = str(settings.BASE_DIR)
     
-    return JsonResponse({
-        'show_migrations': show_output,
-        'migration_files': files,
-        'cwd': cwd,
-        'base_dir': str(settings.BASE_DIR)
-    })
+    return JsonResponse(results)
 
 def basic_software(request):
     return render(request, 'hub/basic_software.html')
