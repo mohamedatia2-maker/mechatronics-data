@@ -12,8 +12,14 @@ class AboutView(TemplateView):
 def debug_migrations(request):
     from django.db import connection
     from django.db.migrations.recorder import MigrationRecorder
+    import os
     applied = MigrationRecorder.Migration.objects.all().values_list('app', 'name')
-    return JsonResponse({'applied': list(applied)})
+    migrations_dir = os.path.join(os.path.dirname(__file__), 'migrations')
+    files = os.listdir(migrations_dir) if os.path.exists(migrations_dir) else []
+    return JsonResponse({
+        'applied': list(applied),
+        'files': files
+    })
 
 def basic_software(request):
     return render(request, 'hub/basic_software.html')
