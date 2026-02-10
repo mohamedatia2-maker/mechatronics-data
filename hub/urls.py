@@ -58,5 +58,4 @@ urlpatterns = [
     path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='hub/password_change_done.html'
     ), name='password_change_done'),
-    path('debug/migrations/', views.debug_migrations, name='debug_migrations'),
 ]
