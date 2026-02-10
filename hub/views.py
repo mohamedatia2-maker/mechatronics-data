@@ -9,6 +9,12 @@ import json, re, os, time
 class AboutView(TemplateView):
     template_name = 'about.html'
 
+def debug_migrations(request):
+    from django.db import connection
+    from django.db.migrations.recorder import MigrationRecorder
+    applied = MigrationRecorder.Migration.objects.all().values_list('app', 'name')
+    return JsonResponse({'applied': list(applied)})
+
 def basic_software(request):
     return render(request, 'hub/basic_software.html')
 
