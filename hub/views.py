@@ -327,23 +327,77 @@ def admin_dashboard(request):
                      
                      count = 0
                      
+                     # Separate solutions from regular files
+                     regular_files = []
+                     solution_files = []
+                     
                      for f in files:
-                         # No need to check duplicates since we cleared them, unless dupes in Drive
+                         name_lower = f['name'].lower()
+                         if 'solution' in name_lower or 'answer' in name_lower or 'model' in name_lower or 'حل' in name_lower:
+                             solution_files.append(f)
+                         else:
+                             regular_files.append(f)
+
+                     # Map created resources by normalized title for linking
+                     created_resources = {} 
+
+                     # 1. Create Regular Resources
+                     for f in regular_files:
                          preview = f"https://drive.google.com/file/d/{f['id']}/preview"
                          download = f"https://drive.google.com/uc?id={f['id']}&export=download"
                          
-                         SubjectResource.objects.create(
+                         clean_title = f['name'].replace('.pdf', '').replace('.txt', '').strip()
+                         
+                         res = SubjectResource.objects.create(
                              subject=subject,
                              category=category,
-                             title=f['name'].replace('.pdf', '').replace('.txt', ''), # Clean title
+                             title=clean_title,
                              preview_url=preview,
                              download_url=download,
                              drive_folder_url=folder_url,
                              file_id=f['id']
                          )
+                         created_resources[clean_title.lower()] = res
                          count += 1
+                    
+                     # 2. Process Solutions and Link them
+                     for f in solution_files:
+                         preview = f"https://drive.google.com/file/d/{f['id']}/preview"
+                         download = f"https://drive.google.com/uc?id={f['id']}&export=download"
+                         
+                         # Attempt to find the parent sheet
+                         # logic: "Sheet 1 Solution" -> "Sheet 1"
+                         # Remove common solution keywords
+                         name_lower = f['name'].lower().replace('.pdf', '').replace('.txt', '')
+                         search_name = name_lower.replace('solution', '').replace('answer', '').replace('model', '').replace('answers', '').replace('حل', '').strip()
+                         
+                         # Fix double spaces or trailing punctuation often left by removal
+                         import re
+                         search_name = re.sub(r'\s+', ' ', search_name).strip(" -_")
+                         
+                         parent_res = created_resources.get(search_name)
+                         
+                         if parent_res:
+                             # Link to existing resource
+                             parent_res.solution_url = download # Using download link for solution button usually better, or preview?
+                             parent_res.solution_file_id = f['id']
+                             parent_res.save()
+                         else:
+                             # Fallback: Create as standalone resource if no parent found
+                             clean_title = f['name'].replace('.pdf', '').replace('.txt', '').strip()
+                             SubjectResource.objects.create(
+                                 subject=subject,
+                                 category=category,
+                                 title=clean_title,
+                                 preview_url=preview,
+                                 download_url=download,
+                                 drive_folder_url=folder_url,
+                                 file_id=f['id'],
+                                 solution_url=download if 'solution' in clean_title.lower() else None # Self-referencing if it IS a solution? No, just standard.
+                             )
+                             count += 1
                              
-                     messages.success(request, f"Import Complete! Cleared {deleted_count} old files. Added {count} new files from Drive.")
+                     messages.success(request, f"Import Complete! Cleared {deleted_count} old files. Added/Linked {count} files from Drive.")
                      
                      # Notify Users similar to manual upload
                      target_users = User.objects.filter(profile__level=subject.level)

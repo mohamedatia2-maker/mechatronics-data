@@ -61,6 +61,11 @@ class SubjectResource(models.Model):
     # Drive API Integration Fields
     drive_folder_url = models.URLField(max_length=500, blank=True, null=True, help_text="Source Folder URL (if imported)")
     file_id = models.CharField(max_length=255, blank=True, null=True, help_text="Google Drive File ID")
+    
+    # Solution Linking
+    solution_url = models.URLField(max_length=500, blank=True, null=True, help_text="URL for the solution file")
+    solution_file_id = models.CharField(max_length=255, blank=True, null=True, help_text="Google Drive File ID for Solution")
+
     upload_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
