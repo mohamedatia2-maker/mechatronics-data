@@ -20,7 +20,7 @@
         </a>
 
         <!-- Professional Page Header -->
-        <div class="mb-20 relative">
+        <div class="mb-32 relative">
             <div
                 class="flex flex-col md:flex-row items-center justify-between w-full bg-white/30 dark:bg-black/20 backdrop-blur-xl p-8 rounded-3xl border border-white/30 dark:border-white/10 shadow-lg space-y-10 md:space-y-0">
                 <div class="flex items-center space-x-8">
@@ -90,31 +90,32 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Subjects Container -->
-            <div id="semester1" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start grid-flow-dense">
-                {% if subjects_s1 %}
-                {% for subject in subjects_s1 %}
-                {% with semester=1 %}
-                {% include "partials/subject_card.html" %}
-                {% endwith %}
-                {% endfor %}
-                {% else %}
-                <p class="col-span-full text-center text-gray-400 italic py-12">No subjects found for Semester 1.</p>
-                {% endif %}
-            </div>
-
-            <div id="semester2" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden items-start grid-flow-dense">
-                {% if subjects_s2 %}
-                {% for subject in subjects_s2 %}
-                {% with semester=2 %}
-                {% include "partials/subject_card.html" %}
-                {% endwith %}
-                {% endfor %}
-                {% else %}
-                <p class="col-span-full text-center text-gray-400 italic py-12">No subjects found for Semester 2.</p>
-                {% endif %}
-            </div>
         </div>
+
+        <!-- Subjects Container -->
+        <div id="semester1" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start grid-flow-dense">
+            {% if subjects_s1 %}
+            {% for subject in subjects_s1 %}
+            {% with semester=1 %}
+            {% include "partials/subject_card.html" %}
+            {% endwith %}
+            {% endfor %}
+            {% else %}
+            <p class="col-span-full text-center text-gray-400 italic py-12">No subjects found for Semester 1.</p>
+            {% endif %}
+        </div>
+
+        <div id="semester2" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden items-start grid-flow-dense">
+            {% if subjects_s2 %}
+            {% for subject in subjects_s2 %}
+            {% with semester=2 %}
+            {% include "partials/subject_card.html" %}
+            {% endwith %}
+            {% endfor %}
+            {% else %}
+            <p class="col-span-full text-center text-gray-400 italic py-12">No subjects found for Semester 2.</p>
+            {% endif %}
+        </div>
+    </div>
 </main>
 {% endblock %}
