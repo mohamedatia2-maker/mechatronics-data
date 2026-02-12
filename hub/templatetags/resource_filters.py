@@ -18,3 +18,11 @@ def filename(value):
 def subject_icon(subject_name):
     """Returns a FontAwesome icon class string based on keywords in the subject name"""
     return get_subject_icon(subject_name)
+
+@register.filter
+def is_pdf(value):
+    """Returns True if the URL points to a PDF or a Google Drive file"""
+    if not value:
+        return False
+    v = str(value).lower()
+    return '.pdf' in v or 'drive.google.com' in v

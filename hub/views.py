@@ -189,7 +189,8 @@ class LevelDetailView(DetailView):
             sheets_count=Count('pdf_resources', filter=Q(pdf_resources__category='Sheets')),
             midterm_count=Count('pdf_resources', filter=Q(pdf_resources__category='Midterm')),
             final_count=Count('pdf_resources', filter=Q(pdf_resources__category='Final')),
-            revision_count=Count('pdf_resources', filter=Q(pdf_resources__category='Revision'))
+            revision_count=Count('pdf_resources', filter=Q(pdf_resources__category='Revision')),
+            workshop_count=Count('pdf_resources', filter=Q(pdf_resources__category='Workshops'))
         )
         context['subjects_s2'] = Subject.objects.filter(level=level, semester=2).prefetch_related('pdf_resources').annotate(
             explanation_count=Count('pdf_resources', filter=Q(pdf_resources__category='Explanation')),
@@ -197,7 +198,8 @@ class LevelDetailView(DetailView):
             sheets_count=Count('pdf_resources', filter=Q(pdf_resources__category='Sheets')),
             midterm_count=Count('pdf_resources', filter=Q(pdf_resources__category='Midterm')),
             final_count=Count('pdf_resources', filter=Q(pdf_resources__category='Final')),
-            revision_count=Count('pdf_resources', filter=Q(pdf_resources__category='Revision'))
+            revision_count=Count('pdf_resources', filter=Q(pdf_resources__category='Revision')),
+            workshop_count=Count('pdf_resources', filter=Q(pdf_resources__category='Workshops'))
         )
         context['categories'] = [t[0] for t in SubjectResource.RESOURCE_TYPES]
         return context
@@ -220,7 +222,8 @@ def student_dashboard(request):
         sheets_count=Count('pdf_resources', filter=Q(pdf_resources__category='Sheets'), distinct=True),
         midterm_count=Count('pdf_resources', filter=Q(pdf_resources__category='Midterm'), distinct=True),
         final_count=Count('pdf_resources', filter=Q(pdf_resources__category='Final'), distinct=True),
-        revision_count=Count('pdf_resources', filter=Q(pdf_resources__category='Revision'), distinct=True)
+        revision_count=Count('pdf_resources', filter=Q(pdf_resources__category='Revision'), distinct=True),
+        workshop_count=Count('pdf_resources', filter=Q(pdf_resources__category='Workshops'), distinct=True)
     ).order_by('name')
 
     subjects_s1 = subjects_all.filter(semester=1)
@@ -601,7 +604,16 @@ def get_notes_ajax(request):
 
 def resource_view(request, subject_id, category):
     subject = get_object_or_404(Subject, id=subject_id)
-    resources = SubjectResource.objects.filter(subject=subject, category=category)
+    
+    if category == 'Exams' and subject.name == 'Production Technology':
+        # Combined Midterm + Final for this specific course
+        resources = SubjectResource.objects.filter(
+            subject=subject, 
+            category__in=['Midterm', 'Final']
+        )
+    else:
+        resources = SubjectResource.objects.filter(subject=subject, category=category)
+        
     context = {
         'subject_obj': subject,
         'subject_name': subject.name,

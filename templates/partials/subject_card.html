@@ -60,56 +60,60 @@
             <div class="pt-8 mt-6 border-t border-gray-100 dark:border-white/5">
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {% for category in categories %}
-                    <a href="{% url 'hub:resource_detail' subject.id category %}"
+                    {# --- SPECIAL CASE: Production Technology (Level 000, Sem 2) --- #}
+                    {% if subject.name == 'Production Technology' and subject.level.level_id == '000' %}
+
+                    {% if category == 'Midterm' %}
+                    {# RENDER EXAMS BUTTON (Combines Midterm + Final) #}
+                    <a href="{% url 'hub:resource_detail' subject.id 'Exams' %}"
                         class="group/tile relative flex flex-col items-center justify-center p-5 rounded-3xl bg-gray-50/50 dark:bg-white/5 border border-transparent hover:border-forest-green/20 dark:hover:border-emerald-500/20 hover:bg-white dark:hover:bg-white/10 transition-all duration-300 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-forest-green/5">
-
-                        <!-- Mini Icon -->
-                        <div class="w-10 h-10 rounded-xl mb-3 flex items-center justify-center transition-all duration-300
-                            {% if category == 'Explanation' %}bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400
-                            {% elif category == 'Lectures' %}bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400
-                            {% elif category == 'Sheets' %}bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400
-                            {% elif category == 'Midterm' %}bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400
-                            {% elif category == 'Final' %}bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400
-                            {% elif category == 'Revision' %}bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400
-                            {% else %}bg-gray-100 text-gray-600 dark:bg-gray-800/30 dark:text-gray-400{% endif %}
-                            group-hover/tile:scale-110 group-hover/tile:rotate-3">
-                            {% if category == 'Explanation' %}<i class="fas fa-book-open"></i>
-                            {% elif category == 'Lectures' %}<i class="fas fa-video"></i>
-                            {% elif category == 'Sheets' %}<i class="fas fa-file-alt"></i>
-                            {% elif category == 'Midterm' %}<i class="fas fa-pen-fancy"></i>
-                            {% elif category == 'Final' %}<i class="fas fa-user-graduate"></i>
-                            {% elif category == 'Revision' %}<i class="fas fa-sync"></i>
-                            {% else %}<i class="fas fa-folder"></i>
-                            {% endif %}
+                        <div
+                            class="w-10 h-10 rounded-xl mb-3 flex items-center justify-center transition-all duration-300 bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 group-hover/tile:scale-110 group-hover/tile:rotate-3">
+                            <i class="fas fa-pen-nib"></i>
                         </div>
-
                         <span
                             class="text-[10px] font-black uppercase tracking-widest text-charcoal dark:text-white mb-1">
-                            {% if category == 'Lectures' %}
-                            <span class="lang-en">Lectures</span><span class="lang-ar">محاضرات</span>
-                            {% elif category == 'Sheets' %}
-                            <span class="lang-en">Sheets</span><span class="lang-ar">شيتات</span>
-                            {% elif category == 'Explanation' %}
-                            <span class="lang-en">Explanation</span><span class="lang-ar">شرح</span>
-                            {% elif category == 'Midterm' %}
-                            <span class="lang-en">Midterm</span><span class="lang-ar">ميدتيرم</span>
-                            {% elif category == 'Final' %}
-                            <span class="lang-en">Final</span><span class="lang-ar">فاينل</span>
-                            {% elif category == 'Revision' %}
-                            <span class="lang-en">Revision</span><span class="lang-ar">مراجعة</span>
-                            {% else %}{{ category }}{% endif %}
+                            <span class="lang-en">Exams</span><span class="lang-ar">امتحانات</span>
                         </span>
-
                         <span class="text-[9px] font-bold text-gray-400">
-                            {% if category == 'Explanation' %}({{ subject.explanation_count }})
-                            {% elif category == 'Lectures' %}({{ subject.lectures_count }})
-                            {% elif category == 'Sheets' %}({{ subject.sheets_count }})
-                            {% elif category == 'Midterm' %}({{ subject.midterm_count }})
-                            {% elif category == 'Final' %}({{ subject.final_count }})
-                            {% elif category == 'Revision' %}({{ subject.revision_count }})
-                            {% else %}(0){% endif %}
+                            ({{ subject.midterm_count|add:subject.final_count }})
                         </span>
                     </a>
+
+                    {% elif category == 'Final' %}
+                    {# RENDER WORKSHOPS BUTTON #}
+                    <a href="{% url 'hub:resource_detail' subject.id 'Workshops' %}"
+                        class="group/tile relative flex flex-col items-center justify-center p-5 rounded-3xl bg-gray-50/50 dark:bg-white/5 border border-transparent hover:border-forest-green/20 dark:hover:border-emerald-500/20 hover:bg-white dark:hover:bg-white/10 transition-all duration-300 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-forest-green/5">
+                        <div
+                            class="w-10 h-10 rounded-xl mb-3 flex items-center justify-center transition-all duration-300 bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400 group-hover/tile:scale-110 group-hover/tile:rotate-3">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <span
+                            class="text-[10px] font-black uppercase tracking-widest text-charcoal dark:text-white mb-1">
+                            <span class="lang-en">Workshops</span><span class="lang-ar">ورش عمل</span>
+                        </span>
+                        <span class="text-[9px] font-bold text-gray-400">
+                            ({{ subject.workshop_count }})
+                        </span>
+                    </a>
+
+                    {% elif category == 'Workshops' %}
+                    {# Skip Workshops in the loop because we already rendered it in place of Final #}
+
+                    {% else %}
+                    {# Render Normal Categories (Explanation, Lectures, Sheets, Revision) #}
+                    {% include "hub/partials/subject_card_item.html" with category=category subject=subject %}
+                    {% endif %}
+
+                    {% else %}
+                    {# --- NORMAL SUBJECTS --- #}
+                    {% if category == 'Workshops' %}
+                    {# Skip Workshops for normal subjects for now #}
+                    {% else %}
+                    <!-- Render Standard Card -->
+                    {% include "hub/partials/subject_card_item.html" with category=category subject=subject %}
+                    {% endif %}
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>

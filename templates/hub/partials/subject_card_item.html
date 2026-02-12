@@ -1,0 +1,54 @@
+<a href="{% url 'hub:resource_detail' subject.id category %}"
+    class="group/tile relative flex flex-col items-center justify-center p-5 rounded-3xl bg-gray-50/50 dark:bg-white/5 border border-transparent hover:border-forest-green/20 dark:hover:border-emerald-500/20 hover:bg-white dark:hover:bg-white/10 transition-all duration-300 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-forest-green/5">
+
+    <!-- Mini Icon -->
+    <div class="w-10 h-10 rounded-xl mb-3 flex items-center justify-center transition-all duration-300
+                    {% if category == 'Explanation' %}bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400
+                    {% elif category == 'Lectures' %}bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400
+                    {% elif category == 'Sheets' %}bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400
+                    {% elif category == 'Midterm' %}bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400
+                    {% elif category == 'Final' %}bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400
+                    {% elif category == 'Revision' %}bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400
+                    {% elif category == 'Workshops' %}bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400
+                    {% else %}bg-gray-100 text-gray-600 dark:bg-gray-800/30 dark:text-gray-400{% endif %}
+                    group-hover/tile:scale-110 group-hover/tile:rotate-3">
+        {% if category == 'Explanation' %}<i class="fas fa-book-open"></i>
+        {% elif category == 'Lectures' %}<i class="fas fa-video"></i>
+        {% elif category == 'Sheets' %}<i class="fas fa-file-alt"></i>
+        {% elif category == 'Midterm' %}<i class="fas fa-pen-fancy"></i>
+        {% elif category == 'Final' %}<i class="fas fa-user-graduate"></i>
+        {% elif category == 'Revision' %}<i class="fas fa-sync"></i>
+        {% elif category == 'Workshops' %}<i class="fas fa-tools"></i>
+        {% else %}<i class="fas fa-folder"></i>
+        {% endif %}
+    </div>
+
+    <span class="text-[10px] font-black uppercase tracking-widest text-charcoal dark:text-white mb-1">
+        {% if category == 'Lectures' %}
+        <span class="lang-en">Lectures</span><span class="lang-ar">محاضرات</span>
+        {% elif category == 'Sheets' %}
+        <span class="lang-en">Sheets</span><span class="lang-ar">شيتات</span>
+        {% elif category == 'Explanation' %}
+        <span class="lang-en">Explanation</span><span class="lang-ar">شرح</span>
+        {% elif category == 'Midterm' %}
+        <span class="lang-en">Midterm</span><span class="lang-ar">ميدتيرم</span>
+        {% elif category == 'Final' %}
+        <span class="lang-en">Final</span><span class="lang-ar">فاينل</span>
+        {% elif category == 'Revision' %}
+        <span class="lang-en">Revision</span><span class="lang-ar">مراجعة</span>
+        {% elif category == 'Workshops' %}
+        <span class="lang-en">Workshops</span><span class="lang-ar">ورش عمل</span>
+        {% else %}{{ category }}{% endif %}
+    </span>
+
+    <span class="text-[9px] font-bold text-gray-400">
+        {% if category == 'Explanation' %}({{ subject.explanation_count }})
+        {% elif category == 'Lectures' %}({{ subject.lectures_count }})
+        {% elif category == 'Sheets' %}({{ subject.sheets_count }})
+        {% elif category == 'Midterm' %}({{ subject.midterm_count }})
+        {% elif category == 'Final' %}({{ subject.final_count }})
+        {% elif category == 'Revision' %}({{ subject.revision_count }})
+        {% elif category == 'Workshops' %}({{ subject.workshop_count }})
+        {% else %}(0){% endif %}
+    </span>
+</a>

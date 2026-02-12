@@ -50,6 +50,7 @@ class SubjectResource(models.Model):
         ('Midterm', 'Midterm'),
         ('Final', 'Final'),
         ('Revision', 'Revision'),
+        ('Workshops', 'Workshops'),
     ]
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='pdf_resources')
     title = models.CharField(max_length=255, blank=True, null=True, help_text="Specific resource name (e.g. 'Lecture 1')")
