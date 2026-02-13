@@ -1,0 +1,65 @@
+<a href="{% url 'hub:resource_detail' subject.id category %}"
+    class="group/item flex flex-col items-center justify-center p-4 lg:p-6 rounded-[1.5rem] lg:rounded-[2rem] bg-white/50 dark:bg-white/5 border border-transparent hover:border-forest-green/20 dark:hover:border-emerald-500/20 hover:bg-white dark:hover:bg-white/10 hover:shadow-2xl hover:shadow-forest-green/5 transition-all duration-500 text-center relative overflow-hidden"
+    onclick="event.stopPropagation()">
+
+    <div class="w-10 h-10 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl mb-3 lg:mb-4 flex items-center justify-center transition-all duration-500
+        {% if category == 'Explanation' %}bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400
+        {% elif category == 'Lectures' %}bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400
+        {% elif category == 'Sheets' %}bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400
+        {% elif category == 'Midterm' or category == 'Exams' %}bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400
+        {% elif category == 'Final' %}bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400
+        {% elif category == 'Revision' %}bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400
+        {% else %}bg-gray-100 text-gray-600 dark:bg-gray-800/30 dark:text-gray-400{% endif %}
+        group-hover/item:scale-110 group-hover/item:rotate-3">
+        {% if category == 'Explanation' %}<i class="fas fa-book-open text-base lg:text-xl"></i>
+        {% elif category == 'Lectures' %}<i class="fas fa-video text-base lg:text-xl"></i>
+        {% elif category == 'Sheets' %}<i class="fas fa-file-alt text-base lg:text-xl"></i>
+        {% elif category == 'Midterm' %}<i class="fas fa-pen-fancy text-base lg:text-xl"></i>
+        {% elif category == 'Final' %}<i class="fas fa-user-graduate text-base lg:text-xl"></i>
+        {% elif category == 'Exams' %}<i class="fas fa-pen-nib text-base lg:text-xl"></i>
+        {% elif category == 'Revision' %}<i class="fas fa-sync text-base lg:text-xl"></i>
+        {% else %}<i class="fas fa-folder text-base lg:text-xl"></i>
+        {% endif %}
+    </div>
+
+    <span
+        class="text-[10px] lg:text-xs font-black text-charcoal dark:text-white uppercase tracking-wider lg:tracking-widest transition-colors duration-300 group-hover/item:text-forest-green dark:group-hover/item:text-emerald-400">
+        {% if category == 'Lectures' %}
+        <span class="lang-en">Lectures</span><span class="lang-ar">محاضرات</span>
+        {% elif category == 'Sheets' %}
+        <span class="lang-en">Sheets</span><span class="lang-ar">شيتات</span>
+        {% elif category == 'Explanation' %}
+        <span class="lang-en">Expl.</span><span class="lang-ar">شرح</span>
+        {% elif category == 'Midterm' %}
+        <span class="lang-en">Midterm</span><span class="lang-ar">ميدتيرم</span>
+        {% elif category == 'Final' %}
+        <span class="lang-en">Final</span><span class="lang-ar">فاينل</span>
+        {% elif category == 'Exams' %}
+        <span class="lang-en">Exams</span><span class="lang-ar">امتحانات</span>
+        {% elif category == 'Revision' %}
+        <span class="lang-en">Rev.</span><span class="lang-ar">مراجعة</span>
+        {% else %}
+        {{ category }}
+        {% endif %}
+    </span>
+
+    <span class="block text-[8px] lg:text-[10px] text-gray-500 dark:text-gray-400 font-bold mt-0.5 lg:mt-1">
+        {% if override_count != None %}
+        ({{ override_count }})
+        {% elif category == 'Explanation' %}
+        ({{ subject.explanation_count }})
+        {% elif category == 'Lectures' %}
+        ({{ subject.lectures_count }})
+        {% elif category == 'Sheets' %}
+        ({{ subject.sheets_count }})
+        {% elif category == 'Midterm' %}
+        ({{ subject.midterm_count }})
+        {% elif category == 'Final' %}
+        ({{ subject.final_count }})
+        {% elif category == 'Revision' %}
+        ({{ subject.revision_count }})
+        {% else %}
+        (0)
+        {% endif %}
+    </span>
+</a>
