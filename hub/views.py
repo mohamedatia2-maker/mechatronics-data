@@ -16,6 +16,19 @@ def basic_software(request):
 def online_courses(request):
     return render(request, 'hub/online_courses.html')
 
+from django.http import HttpResponse
+from django.conf import settings
+
+def serve_manifest(request):
+    path = os.path.join(settings.BASE_DIR, 'static', 'manifest.json')
+    with open(path, 'r') as f:
+        return HttpResponse(f.read(), content_type='application/json')
+
+def serve_sw(request):
+    path = os.path.join(settings.BASE_DIR, 'static', 'sw.js')
+    with open(path, 'r') as f:
+        return HttpResponse(f.read(), content_type='application/javascript')
+
 # New Resources Views
 def about_department(request):
     return render(request, 'hub/about_department.html')

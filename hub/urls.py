@@ -58,4 +58,8 @@ urlpatterns = [
     path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='hub/password_change_done.html'
     ), name='password_change_done'),
+
+    # PWA Assets
+    path('manifest.json', views.serve_manifest, name='manifest_json'),
+    path('sw.js', views.serve_sw, name='service_worker'),
 ]

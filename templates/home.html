@@ -29,20 +29,20 @@
                     <h1
                         class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-forest-green to-emerald-400 font-['Playfair_Display'] leading-tight">
                         <span
-                            class="lang-en block text-2xl md:text-3xl font-light text-gray-600 dark:text-gray-300 mb-2">Welcome
+                            class="lang-en block text-xl md:text-3xl font-light text-gray-600 dark:text-gray-300 mb-2">Welcome
                             to the Student Support Platform of</span>
-                        <span class="lang-en block text-4xl md:text-6xl mb-4">Zagazig National University</span>
+                        <span class="lang-en block text-3xl md:text-6xl mb-4">Zagazig National University</span>
                         <div class="h-1 w-24 bg-forest-green rounded-full mb-4"></div>
                         <span
-                            class="lang-en block text-xl md:text-2xl font-medium text-forest-green tracking-wide">Faculty
+                            class="lang-en block text-lg md:text-2xl font-medium text-forest-green tracking-wide">Faculty
                             of Engineering – Mechatronics Department</span>
 
                         <span
-                            class="lang-ar block text-2xl md:text-3xl font-light text-gray-600 dark:text-gray-400 mb-2">مرحباً
+                            class="lang-ar block text-xl md:text-3xl font-light text-gray-600 dark:text-gray-400 mb-2">مرحباً
                             بكم في منصة دعم الطلاب بجامعة</span>
-                        <span class="lang-ar block text-4xl md:text-6xl mb-4">الزقازيق الأهلية</span>
+                        <span class="lang-ar block text-3xl md:text-6xl mb-4">الزقازيق الأهلية</span>
                         <div class="h-1 w-24 bg-forest-green rounded-full mb-4 mr-0 ml-auto rtl:ml-0 rtl:mr-auto"></div>
-                        <span class="lang-ar block text-xl md:text-2xl font-medium text-forest-green tracking-wide">كلية
+                        <span class="lang-ar block text-lg md:text-2xl font-medium text-forest-green tracking-wide">كلية
                             الهندسة - قسم الميكاترونكس</span>
                     </h1>
                 </header>
@@ -87,6 +87,105 @@
             </div>
         </div>
     </div>
+
+    <!-- PWA Floating Banner (Professional Snackbar) -->
+    <div id="pwa-banner"
+        class="fixed bottom-24 left-4 right-4 md:left-auto md:right-8 md:w-[400px] z-[120] hidden animate-slide-up">
+        <div
+            class="relative p-1 rounded-3xl bg-white/60 dark:bg-charcoal/60 backdrop-blur-3xl border border-white/20 dark:border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden group">
+
+            <!-- Glow Effect -->
+            <div class="absolute inset-0 bg-gradient-to-br from-forest-green/10 to-transparent pointer-events-none">
+            </div>
+
+            <div class="relative p-5 flex flex-col gap-4">
+                <!-- Close Button -->
+                <button onclick="dismissPWABanner()"
+                    class="absolute top-2 right-2 p-2 text-gray-400 hover:text-charcoal dark:hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-forest-green/20 blur-lg rounded-full animate-pulse"></div>
+                        <div
+                            class="relative w-14 h-14 bg-white dark:bg-charcoal/40 rounded-2xl flex items-center justify-center p-2 shadow-[0_8px_20px_rgba(0,0,0,0.1)]">
+                            <img src="{% static 'img/logo.png' %}" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-900 dark:text-white text-lg tracking-tight">
+                            <span class="lang-en font-['Playfair_Display']">Mechatronics Data</span>
+                            <span class="lang-ar">بيانات الميكاترونكس</span>
+                        </h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 font-medium leading-tight">
+                            <span class="lang-en">Experience the future of student support on your device.</span>
+                            <span class="lang-ar">استمتع بمستقبل دعم الطلاب مباشرة على جهازك.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="window.installApp()"
+                        class="flex-1 py-3.5 bg-gradient-to-r from-forest-green to-emerald-600 hover:from-forest-green/90 hover:to-emerald-500 text-white rounded-2xl font-bold text-sm transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fas fa-plus-circle text-xs opacity-70"></i>
+                        <span class="lang-en">Install App</span>
+                        <span class="lang-ar">تثبيت الآن</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes slide-up {
+            0% {
+                transform: translateY(30px) scale(0.95);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-up {
+            animation: slide-up 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+    </style>
+
+    <script>
+        // PWA Banner Logic
+        (function () {
+            const banner = document.getElementById('pwa-banner');
+            const dismissalKey = 'pwa_banner_dismissed';
+
+            function showBanner() {
+                if (banner && !sessionStorage.getItem(dismissalKey)) {
+                    banner.classList.remove('hidden');
+                }
+            }
+
+            window.dismissPWABanner = function () {
+                if (banner) {
+                    banner.classList.add('hidden');
+                    sessionStorage.setItem(dismissalKey, 'true');
+                }
+            };
+
+            // Listen for the custom event from base.html
+            window.addEventListener('pwaInstallable', showBanner);
+
+            // Also check if the event already fired
+            if (window.deferredPrompt) {
+                showBanner();
+            }
+        })();
+    </script>
 
     <!-- Mechatronics Components Section -->
     <div class="max-w-6xl mx-auto px-4 mt-20 mb-16">
